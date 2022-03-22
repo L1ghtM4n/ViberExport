@@ -49,7 +49,7 @@ class ViberExtractor:
             yield dict(
                 chat=row[0],
                 user=(row[2] if row[2] else row[3])[1:-1],
-                phone=int(row[1][1:]),
+                phone=int(row[1][1:] if row[1] else 0),
                 dateOfBirth=row[4] if row[4] else 'Unknown',
                 messages=lambda : self.__dump_messages(row[0])
             )
@@ -68,7 +68,7 @@ class ViberExtractor:
         for row in self.cursor.execute(sql).fetchall():
             yield dict(
                 date=datetime.fromtimestamp(row[4] / 1000),
-                user=(row[0] if row[0] else row[1])[1:-1],
-                phone=int(row[2][1:]),
+                user=str((row[0] if row[0] else row[1]))[1:-1],
+                phone=row[2][1:] if row[2] else 0,
                 message=row[3]
             )
